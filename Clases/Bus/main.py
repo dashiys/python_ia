@@ -1,21 +1,28 @@
 from bus import Bus
 from pasajeros import Pasajero
 
+def NumValido(msj):
+    while True:
+        try:
+            opcion = int(input(msj))
+            return opcion
+        except ValueError:
+            print("Error: Introduce un número válido")
+
 def gestionar_bus(bus):
     """Submenú para manejar un bus específico"""
     while True:
-        print(f"=== GESTIONANDO BUS {bus.id} ===")
-        print(f"Capacidad total: {bus.getCapacidad()}")
-        print(f"Ocupados: {bus.getBilletes()}")
-        print(f"Libres: {bus.asientosLibres()}")
-        print("\nOpciones:")
-        print("1. Comprar billete")
-        print("2. Mostrar pasajeros")
-        print("3. Devolver billete")
-        print("0. Volver al menú principal")
-
-        opcion = int(input("\nSeleccione una opción: "))
-
+        opcion = NumValido(
+        f"=== GESTIONANDO BUS {bus.id} ===\n"\
+        f"Capacidad total: {bus.getCapacidad()}\n"\
+        f"Ocupados: {bus.getBilletes()}\n"\
+        f"Libres: {bus.asientosLibres()}\n"\
+            "\nOpciones:\n"\
+            "1. Comprar billete\n"\
+            "2. Mostrar pasajeros\n"\
+            "3. Devolver billete\n"\
+            "0. Volver al menú principal\n")
+    
         if opcion == 1:
             nombre = input("Nombre de la persona: ")
             persona = Pasajero(nombre)
@@ -41,21 +48,28 @@ buses = {}
 contador_id = 1
 
 while True:
-    print("1. Crear nuevo bus")
-    print("2. Listar buses")
-    print("3. Seleccionar un bus")
-    print("0. Salir")
-
-    opcion = int(input("\nSeleccione una opción: "))
+    
+    opcion = NumValido(
+        "\nOpciones:\n"\
+        "1. Crear nuevo bus\n"\
+        "2. Listar buses\n"\
+        "3. Seleccionar un bus\n"\
+        "0. Salir\n")
 
     if opcion == 1:
-        capacidad = int(input("Capacidad del bus: "))
+        while True:
+            capacidad = NumValido("Capacidad del bus: ")
+            if capacidad > 0:
+                break
+            else:
+                print(f"El numero no puede ser negativo")
+                
         bus = Bus(capacidad)
         bus.id = contador_id  # asignar un ID único
         buses[contador_id] = bus
         print(f"Bus {contador_id} creado con capacidad {capacidad}.")
         contador_id += 1
-        input("\nPresione Enter para continuar...")
+        input("\nPresione Enter para continuar...\n")
 
     elif opcion == 2:
         if not buses:
@@ -71,7 +85,7 @@ while True:
             print("No hay buses creados.")
             input("\nPresione Enter para continuar...")
         else:
-            bus_id = int(input("Ingrese el ID del bus: "))
+            bus_id = NumValido("Ingrese el numero del bus: ")
             if bus_id in buses:
                 gestionar_bus(buses[bus_id])
             else:
